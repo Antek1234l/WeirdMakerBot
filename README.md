@@ -8,4 +8,3 @@ You can:
 You can't:
 - Copy the whole code, make discord bot, and claim that it's yours (well, that was obvious)
 - Share this code without crediting me
-test
