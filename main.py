@@ -22,7 +22,7 @@ def add_text(img):
     y2 = random.randint(int(w-w/3),w)
 
     #image = PIL.Image.open(img)
-    font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(30,51))
+    font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(42,60))
     draw = ImageDraw.Draw(img)
 
     x_coord = int(random.randint(x1,x2))
@@ -226,8 +226,8 @@ async def _addcensor(ctx,imglink):
     img = PIL.Image.open('./weirdcore.jpg')
     draw = ImageDraw.Draw(img)
     h, w = img.size
-    x1 = random.randint(0,h)
-    y1 = random.randint(0,w)
+    x1 = random.randint(0,int(w/3))
+    y1 = random.randint(0,int(h/3))
     x2 = random.randint(x1+150, x1+600)
     y2 = random.randint(y1+150, y1+600)
     draw.rectangle((x1,y1,x2,y2), fill=(0,0,0),width = 12)
