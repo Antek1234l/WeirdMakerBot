@@ -16,17 +16,12 @@ def add_text(img):
 
     h, w = img.size
 
-    x1 = random.randint(0,int(w/3))
-    x2 = random.randint(int(h-h/3),h)
-    y1 = random.randint(0,int(h/3))
-    y2 = random.randint(int(w-w/3),w)
-
     #image = PIL.Image.open(img)
     font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(42,60))
     draw = ImageDraw.Draw(img)
 
-    x_coord = int(random.randint(x1,x2))
-    y_coord = int(random.randint(y1,y2))
+    x_coord = int(random.randint(0,int(w/3)))
+    y_coord = int(random.randint(0,int(h/3)))
     redval = int(random.choice(['0','255']))
     greenval = int(random.choice(['0','255']))
     blueval = int(random.choice(['0','255']))
@@ -37,19 +32,20 @@ def add_text(img):
 @client.group(invoke_without_command=True)
 async def help(ctx):
     embed = discord.Embed(title="All commands",colour=0xe59837)
-    embed.add_field(name="ping",value="Returns bots latency",inline=False)
-    embed.add_field(name="help",value="how",inline=False)
-    embed.add_field(name="compressrand <image link>",value="Compresses the image randomly. You have to put link to image",inline=True)
-    embed.add_field(name="compress <compression rate> <image link>",value="<compression rate> - intiger between 1 and 100 where 1 is maximum compression, and 100 is maximum quality.\nCompresses the image", inline=False)
-    embed.add_field(name="addrandomtext <image link>",value="Adds random text to image", inline=False)
-    embed.add_field(name="addtext <image link> <red> <green> <blue> <size> <text>",value="<red>,<green>,<blue> - values between 0 - 255\n<size> - size of the font\n<text> - text that you want to add to image", inline=False)
-    embed.add_field(name="addvoid <image link>",value="Adds void area", inline=False)
-    embed.add_field(name="addlensflare <image link>",value="Adds random lens flare", inline=False)
-    embed.add_field(name="crop <image link>",value="Crops image randomly", inline=False)
-    embed.add_field(name="addcensor <image link>",value="Adds censor box(exactly what it says)", inline=False)
-    embed.add_field(name="squish <axis> <image link>",value='"Squishes" the image on selected axis (x or y).\n Idea by shwenthe^2.', inline=False)
-    embed.add_field(name="simplewc <image link>",value="Creates simple edit(compression, crop and text)", inline=False)
-    embed.add_field(name="complexwc <image link>",value="Creates more complex edit(compression, crop, one random item from this list: void, stars, lens flare,censor box and text)", inline=False)
+    embed.add_field(name="`ping`",value="Returns bots latency",inline=False)
+    embed.add_field(name="`help`",value="how",inline=False)
+    embed.add_field(name="`compressrand` <image link>",value="Compresses the image randomly. You have to put link to image",inline=True)
+    embed.add_field(name="`compress` <compression rate> <image link>",value="<compression rate> - intiger between 1 and 100 where 1 is maximum compression, and 100 is maximum quality.\nCompresses the image", inline=False)
+    embed.add_field(name="`addrandomtext` <image link>",value="Adds random text to image", inline=False)
+    embed.add_field(name="`addtext` <image link> <red> <green> <blue> <size> <text>",value="<red>,<green>,<blue> - values between 0 - 255\n<size> - size of the font\n<text> - text that you want to add to image", inline=False)
+    embed.add_field(name="`addvoid` <image link>",value="Adds void area", inline=False)
+    embed.add_field(name="`addlensflare` <image link>",value="Adds random lens flare", inline=False)
+    embed.add_field(name="`crop` <image link>",value="Crops image randomly", inline=False)
+    embed.add_field(name="`addcensor` <image link>",value="Adds censor box(exactly what it says)", inline=False)
+    embed.add_field(name="`squish` <axis> <image link>",value='"Squishes" the image on selected axis (x or y).\n Idea by shwenthe^2.', inline=False)
+    embed.add_field(name="`baseimage`",value="Posts random base image from database", inline=False)
+    embed.add_field(name="`simplewc` <image link>",value="Creates simple edit(compression, crop and text)", inline=False)
+    embed.add_field(name="`complexwc` <image link>",value="Creates more complex edit(compression, crop, one random item from this list: void, stars, lens flare,censor box and text)", inline=False)
     await ctx.send(embed=embed)
 
 @client.event
@@ -339,6 +335,10 @@ async def squish(ctx,axis,imglink):
         await ctx.send("Squished on y axis", file = discord.File('weirdcore.jpg'))
     else:
         await ctx.send('Please enter X or Y in `axis` field')
+
+@client.command()
+async def baseimage(ctx):
+    await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,8))}.jpg'))
 
   
 client.run('token goes here')
