@@ -14,6 +14,7 @@ texts = ['It will all end soon','End is near','Reality will break soon',
 fonts = ['arial.ttf','times.ttf']
 voidimages = ['void1.png','void2.png','void3.png']
 lensimages = ['lens_flare1.png','lens_flare2.png','lens_flare3.png']
+starimages = ['stars.png','stars2.png','stars3.png',]
 
 complexlist = [1,2,3,4] #1 is void, 2 is censor box, 3 is lens flare, 4 stars
 
@@ -315,7 +316,8 @@ async def _complexwc(ctx,imglink):
             img.paste(lensimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),lensimage)
         else: #stars
             h, w = img.size
-            starimage = PIL.Image.open(f'./stars.png').convert("RGBA")
+            star = random.choice(starimages)
+            starimage = PIL.Image.open(f'./{star}').convert("RGBA")
             img.paste(starimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),starimage)
         
         img = add_text(img)
