@@ -5,7 +5,12 @@ from discord.ext import commands
 
 client = commands.Bot(command_prefix= "wm!")
 client.remove_command("help")
-texts = ['It will all end soon','End is near','Reality will break soon','It is not possible','This is end','Generations','Why?','Somewhere!','Beyond...','Follow me!','Distantly..','Listen closely','the unknown']
+texts = ['It will all end soon','End is near','Reality will break soon',
+'It is not possible','This is end','Generations','Why?','Somewhere!','Beyond...','Follow me!',
+'Distantly..','Listen closely','The unknown','Over and over',"They don't need to!",'How could you',
+'Remember these days!',"I don't like the ending.",'How it ends','What will you have','Never seen the stars!',
+'All that remains','There is still good',"You won't have to",'So much hate','Who were you','The same','Analyze',
+'None to give']
 fonts = ['arial.ttf','times.ttf']
 voidimages = ['void1.png','void2.png','void3.png']
 lensimages = ['lens_flare1.png','lens_flare2.png','lens_flare3.png']
@@ -14,17 +19,25 @@ complexlist = [1,2,3,4] #1 is void, 2 is censor box, 3 is lens flare, 4 stars
 
 def add_text(img):
 
+    cut_off = random.choice([True,False])
+
     h, w = img.size
 
     #image = PIL.Image.open(img)
     font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(42,60))
     draw = ImageDraw.Draw(img)
 
-    x_coord = int(random.randint(0,int(w/3)))
-    y_coord = int(random.randint(0,int(h/3)))
     redval = int(random.choice(['0','255']))
     greenval = int(random.choice(['0','255']))
     blueval = int(random.choice(['0','255']))
+
+    if not cut_off:
+        x_coord = int(random.randint(0,int(w/3)))
+        y_coord = int(random.randint(0,int(h/3)))
+    else:
+        x_coord = int(random.randint(0,w))
+        y_coord = int(random.randint(0,h))
+
     draw.text(xy=(x_coord,y_coord),text = random.choice(texts), fill=(redval,greenval,blueval), font=font)
     return img
 
