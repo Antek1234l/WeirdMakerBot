@@ -21,11 +21,16 @@ complexlist = [1,2,3,4] #1 is void, 2 is censor box, 3 is lens flare, 4 stars
 def add_text(img):
 
     cut_off = random.choice([True,False])
+    big_letters = random.choice([0,0,0,1,1,1,2]) #0 = everything small, 1 = fist letter is big, 2 = every letter is big
 
     h, w = img.size
-
+    if h < 420 and w < 420:
+        font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(18,42))
+    else:
+        font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(42,60))
+        
     #image = PIL.Image.open(img)
-    font = PIL.ImageFont.truetype(random.choice(fonts),random.randint(42,60))
+
     draw = ImageDraw.Draw(img)
 
     redval = int(random.choice(['0','255']))
@@ -36,10 +41,21 @@ def add_text(img):
         x_coord = int(random.randint(0,int(w/3)))
         y_coord = int(random.randint(0,int(h/3)))
     else:
-        x_coord = int(random.randint(0,w))
-        y_coord = int(random.randint(0,h))
+        x_coord = int(random.randint(-w,w))
+        y_coord = int(random.randint(-h,h))
 
-    draw.text(xy=(x_coord,y_coord),text = random.choice(texts), fill=(redval,greenval,blueval), font=font)
+    if big_letters == 0:
+        draw.text(xy=(x_coord,y_coord),text = random.choice(texts).lower(), fill=(redval,greenval,blueval), font=font)
+
+    elif big_letters == 1:
+        draw.text(xy=(x_coord,y_coord),text = random.choice(texts), fill=(redval,greenval,blueval), font=font)
+    
+    else:
+        draw.text(xy=(x_coord,y_coord),text = random.choice(texts).upper(), fill=(redval,greenval,blueval), font=font)
+
+
+
+    
     return img
 
 
@@ -351,8 +367,8 @@ async def squish(ctx,axis,imglink):
     else:
         await ctx.send('Please enter X or Y in `axis` field')
 
-@client.command()
-async def baseimage(ctx):
+@client.command(aliases=['baseimage','baseimages','base'])
+async def _base(ctx):
     await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,8))}.jpg'))
 
   
