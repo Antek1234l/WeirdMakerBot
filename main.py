@@ -59,6 +59,14 @@ def add_text(img):
     return img
 
 
+def fix_large_image(image):
+    h, w = image.size
+
+    if h > 1500 or w > 1500:
+        image = image.resize((600,int(600/h*w)))
+
+    return image
+
 @client.group(invoke_without_command=True)
 async def help(ctx):
     embed = discord.Embed(title="All commands",colour=0xe59837)
@@ -136,6 +144,7 @@ async def addrandomtext(ctx,imglink):
         f.write(imagebytes)
     img = PIL.Image.open('./weirdcore.jpg')
     img = img.convert('RGB')
+    img = fix_large_image(img)
     img = add_text(img)
     img.save("./weirdcore.jpg")
     await ctx.send("Random text added!", file = discord.File('weirdcore.jpg'))
@@ -162,6 +171,9 @@ async def addtext(ctx,imglink,r,g,b,size,*,text):
         with open('weirdcore.jpg','wb') as f:
             f.write(imagebytes)
         img = PIL.Image.open('./weirdcore.jpg')
+
+        img = fix_large_image(img)
+
 
         h, w = img.size
 
@@ -193,6 +205,9 @@ async def addvoid(ctx,imglink):
     with open('currentimage.png','wb') as f:
         f.write(imagebytes)
     img = PIL.Image.open('./currentimage.png')
+    img = fix_large_image(img)
+
+
     h, w = img.size
     void = random.choice(voidimages)
     voidimage = PIL.Image.open(f'./{void}')
@@ -211,6 +226,10 @@ async def addlensflare(ctx,imglink):
     with open('currentimage.png','wb') as f:
         f.write(imagebytes)
     img = PIL.Image.open('./currentimage.png').convert("RGBA")
+    img = fix_large_image(img)
+
+
+
     h, w = img.size
     lens = random.choice(lensimages)
     lensimage = PIL.Image.open(f'./{lens}').convert("RGBA")
@@ -229,6 +248,7 @@ async def crop(ctx,imglink):
         f.write(imagebytes)
     
     img = PIL.Image.open('./currentimage.jpg')
+    img = fix_large_image(img)
 
     h, w = img.size
     #ratio = w/h
@@ -252,6 +272,8 @@ async def _addcensor(ctx,imglink):
     with open('weirdcore.jpg','wb') as f:
         f.write(imagebytes)
     img = PIL.Image.open('./weirdcore.jpg')
+    img = fix_large_image(img)
+
     draw = ImageDraw.Draw(img)
     h, w = img.size
     x1 = random.randint(0,int(w/3))
@@ -275,6 +297,7 @@ async def _simplewc(ctx,imglink):
         with open('weirdcore.jpg','wb') as f:
             f.write(imagebytes)
         img = PIL.Image.open('./weirdcore.jpg')
+        img = fix_large_image(img)
 
         h, w = img.size
 
@@ -303,6 +326,8 @@ async def _complexwc(ctx,imglink):
         with open('weirdcore.jpg','wb') as f:
             f.write(imagebytes)
         img = PIL.Image.open('./weirdcore.jpg')
+
+        img = fix_large_image(img)
 
         h, w = img.size
         withborder = random.choice([True,False])
@@ -382,7 +407,7 @@ async def squish(ctx,axis,imglink):
 
 @client.command(aliases=['baseimage','baseimages','base','baseimg'])
 async def _base(ctx):
-    await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,8))}.jpg'))
+    await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,12))}.jpg'))
 
 @client.command(aliases=["addborder",'frame','addframe'])
 async def _border(ctx,imglink):
