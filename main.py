@@ -1,4 +1,5 @@
-import discord,requests,random
+from os import link
+import discord,requests,random,time
 import PIL
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
@@ -67,25 +68,33 @@ def fix_large_image(image):
 
     return image
 
+
+def get_image_link():
+    time.sleep(0.6)
+    with open ('hlink.txt', 'r+') as file:
+        url = file.read()
+        file.write('                                                                                                                                        ')
+        return url
+
 @client.group(invoke_without_command=True)
 async def help(ctx):
     embed = discord.Embed(title="All commands",colour=0xe59837)
     embed.add_field(name="`ping`",value="Returns bots latency",inline=False)
     embed.add_field(name="`help`",value="how",inline=False)
-    embed.add_field(name="`compressrand` <image link>",value="Compresses the image randomly. You have to put link to image",inline=True)
-    embed.add_field(name="`compress` <compression rate> <image link>",value="<compression rate> - intiger between 1 and 100 where 1 is maximum compression, and 100 is maximum quality.\nCompresses the image", inline=False)
-    embed.add_field(name="`addrandomtext` <image link>",value="Adds random text to image", inline=False)
-    embed.add_field(name="`addtext` <image link> <red> <green> <blue> <size> <text>",value="<red>,<green>,<blue> - values between 0 - 255\n<size> - size of the font\n<text> - text that you want to add to image", inline=False)
-    embed.add_field(name="`addvoid` <image link>",value="Adds void area", inline=False)
-    embed.add_field(name="`addlensflare` <image link>",value="Adds random lens flare", inline=False)
-    embed.add_field(name="`crop` <image link>",value="Crops image randomly", inline=False)
-    embed.add_field(name="`addcensor` <image link>",value="Adds censor box(exactly what it says)", inline=False)
-    embed.add_field(name="`squish` <axis> <image link>",value='"Squishes" the image on selected axis (x or y).\n Idea by shwenthe^2.', inline=False)
+    embed.add_field(name="`compressrand`",value="Compresses the image randomly.",inline=True)
+    embed.add_field(name="`compress` <compression rate>",value="<compression rate> - intiger between 1 and 100 where 1 is maximum compression, and 100 is maximum quality.\nCompresses the image", inline=False)
+    embed.add_field(name="`addrandomtext`",value="Adds random text to image", inline=False)
+    embed.add_field(name="`addtext` <red> <green> <blue> <size> <text>",value="<red>,<green>,<blue> - values between 0 - 255\n<size> - size of the font\n<text> - text that you want to add to image", inline=False)
+    embed.add_field(name="`addvoid`",value="Adds void area", inline=False)
+    embed.add_field(name="`addlensflare`",value="Adds random lens flare", inline=False)
+    embed.add_field(name="`crop`",value="Crops image randomly", inline=False)
+    embed.add_field(name="`addcensor`",value="Adds censor box(exactly what it says)", inline=False)
+    embed.add_field(name="`squish` <axis>",value='"Squishes" the image on selected axis (x or y).\n Idea by shwenthe^2.', inline=False)
     embed.add_field(name="`baseimage`",value="Posts random base image from database", inline=False)
     embed.add_field(name="`randomtext`",value="Posts random base text from database", inline=False)
-    embed.add_field(name="`addborder` <image link>",value="Adds border in random color", inline=False)
-    embed.add_field(name="`simplewc` <image link>",value="Creates simple edit(compression, crop and text)", inline=False)
-    embed.add_field(name="`complexwc` <image link>",value="Creates more complex edit(compression, crop, one random item from this list: void, stars, lens flare,censor box and text)", inline=False)
+    embed.add_field(name="`addborder`",value="Adds border in random color", inline=False)
+    embed.add_field(name="`simplewc` <times>",value="Creates simple edit(compression, crop and text)\n<times> - how many edits it will create", inline=False)
+    embed.add_field(name="`complexwc` <times>",value="Creates more complex edit(compression, crop, one random item from this list: void, stars, lens flare,censor box and text)\n<times> - how many edits it will create", inline=False)
     await ctx.send(embed=embed)
 
 @client.event
@@ -99,7 +108,8 @@ async def ping(ctx):
     await ctx.send(embed=pingembed)
 
 @client.command()
-async def compressrand(ctx,imglink):
+async def compressrand(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -113,7 +123,8 @@ async def compressrand(ctx,imglink):
     await ctx.send("Compressed!", file = discord.File('compressed.jpg'))
 
 @client.command()
-async def compress(ctx,quality,imglink):
+async def compress(ctx,quality):
+    imglink = get_image_link()
     try:
         quality = int(quality)
     except Exception:
@@ -134,7 +145,8 @@ async def compress(ctx,quality,imglink):
         await ctx.send("Compressed!", file = discord.File('compressed.jpg'))
 
 @client.command()
-async def addrandomtext(ctx,imglink):
+async def addrandomtext(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -150,7 +162,8 @@ async def addrandomtext(ctx,imglink):
     await ctx.send("Random text added!", file = discord.File('weirdcore.jpg'))
 
 @client.command()
-async def addtext(ctx,imglink,r,g,b,size,*,text):
+async def addtext(ctx,r,g,b,size,text):
+    imglink = get_image_link()
     try:
         r = int(r)
         g = int(g)
@@ -196,7 +209,8 @@ async def addtext(ctx,imglink,r,g,b,size,*,text):
             await ctx.send("Invalid color value!")
 
 @client.command()
-async def addvoid(ctx,imglink):
+async def addvoid(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -217,7 +231,8 @@ async def addvoid(ctx,imglink):
     await ctx.send("Void added!", file = discord.File('weirdcore.png'))
 
 @client.command()
-async def addlensflare(ctx,imglink):
+async def addlensflare(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -238,7 +253,8 @@ async def addlensflare(ctx,imglink):
     await ctx.send("Lens flare added!", file = discord.File('weirdcore.png'))
 
 @client.command()
-async def crop(ctx,imglink):
+async def crop(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -263,7 +279,8 @@ async def crop(ctx,imglink):
     await ctx.send("Cropped!", file = discord.File('weirdcore.jpg'))
 
 @client.command(aliases=['addcensorbox','addcensor'])
-async def _addcensor(ctx,imglink):
+async def _addcensor(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -287,102 +304,123 @@ async def _addcensor(ctx,imglink):
     await ctx.send("Censor box added!", file = discord.File('weirdcore.jpg'))
 
 @client.command(aliases=['simpleweirdcore','simplewc','simple'])
-async def _simplewc(ctx,imglink):
+async def _simplewc(ctx, times=1):
+    imglink = get_image_link()
     try:
-        try:
-            r = requests.get(imglink)
-        except Exception:
-            await ctx.send("Invalid image link")
-        imagebytes = r.content
-        with open('weirdcore.jpg','wb') as f:
-            f.write(imagebytes)
-        img = PIL.Image.open('./weirdcore.jpg')
-        img = fix_large_image(img)
-
-        h, w = img.size
-
-        x1 = random.randint(0,int(w/3))
-        x2 = random.randint(int(h-h/3),h)
-        y1 = random.randint(0,int(h/3))
-        y2 = random.randint(int(w-w/3),w)
-        img = img.crop((x1,y1,x2,y2))
-
-        img = add_text(img)
-
-        img = img.convert('RGB')
-        img.save("./compressed.jpg",quality=random.randint(15,30))
-        await ctx.send("Finished edit!", file = discord.File('compressed.jpg'))
+        times = int(times)
     except Exception:
-        await ctx.send("An error occured! Please try again.")
+        await ctx.send("Please input a number smaller than or equal 6")
+
+    if times > 6:
+        await ctx.send("Please input a number smaller than or equal 6")
+    else:
+        for i in range(0,times):
+            try:
+                try:
+                    r = requests.get(imglink)
+                except Exception:
+                    await ctx.send("Invalid image link")
+                imagebytes = r.content
+                with open('weirdcore.jpg','wb') as f:
+                    f.write(imagebytes)
+                img = PIL.Image.open('./weirdcore.jpg')
+                img = fix_large_image(img)
+
+                h, w = img.size
+
+                x1 = random.randint(0,int(w/3))
+                x2 = random.randint(int(h-h/3),h)
+                y1 = random.randint(0,int(h/3))
+                y2 = random.randint(int(w-w/3),w)
+                img = img.crop((x1,y1,x2,y2))
+
+                img = add_text(img)
+
+                img = img.convert('RGB')
+                img.save("./compressed.jpg",quality=random.randint(15,30))
+                await ctx.send("Finished edit!", file = discord.File('compressed.jpg'))
+            except Exception:
+                await ctx.send("An error occured! Please try again.")
 
 @client.command(aliases=['complexweirdcore','complexwc','complex'])
-async def _complexwc(ctx,imglink):
+async def _complexwc(ctx, times=1):
+    imglink = get_image_link()
     try:
-        try:
-            r = requests.get(imglink)
-        except Exception:
-            await ctx.send("Invalid image link")
-        imagebytes = r.content
-        with open('weirdcore.jpg','wb') as f:
-            f.write(imagebytes)
-        img = PIL.Image.open('./weirdcore.jpg')
-
-        img = fix_large_image(img)
-
-        h, w = img.size
-        withborder = random.choice([True,False])
-
-        x1 = random.randint(0,int(w/3))
-        x2 = random.randint(int(h-h/3),h)
-        y1 = random.randint(0,int(h/3))
-        y2 = random.randint(int(w-w/3),w)
-        img = img.crop((x1,y1,x2,y2))
-
-        
-        addition = random.choice(complexlist)
-        if addition == 1: #void
-            h, w = img.size
-            void = random.choice(voidimages)
-            voidimage = PIL.Image.open(f'./{void}')
-            img.paste(voidimage,(random.randint(0,int(w/3)),random.randint(0,int(h/3))),voidimage)
-        elif addition == 2: #censor box
-            draw = ImageDraw.Draw(img)
-            h, w = img.size
-            x1 = random.randint(0,h)
-            y1 = random.randint(0,w)
-            x2 = random.randint(x1-150, x1+150)
-            y2 = random.randint(y1-150, y1+150)
-            draw.rectangle((x1,y1,x2,y2), fill=(0,0,0),width = 12)
-        elif addition == 3: #lens flare
-            h, w = img.size
-            lens = random.choice(lensimages)
-            lensimage = PIL.Image.open(f'./{lens}').convert("RGBA")
-            img.paste(lensimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),lensimage)
-        else: #stars
-            h, w = img.size
-            star = random.choice(starimages)
-            starimage = PIL.Image.open(f'./{star}').convert("RGBA")
-            img.paste(starimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),starimage)
-        
-
-        if withborder:
-            r = int(random.choice(['0','128','255']))
-            g = int(random.choice(['0','128','255']))
-            b = int(random.choice(['0','128','255']))
-
-            draw = ImageDraw.Draw(img)
-            draw.rectangle((0,0,h,w),width=random.randint(9,30),outline=(r, g, b))
-
-
-        img = add_text(img)
-        img = img.convert('RGB')
-        img.save("./compressed.jpg",quality=random.randint(15,30))
-        await ctx.send("Finished edit!", file = discord.File('compressed.jpg'))
+        times = int(times)
     except Exception:
-        await ctx.send("An error occured! Please try again.")
+        await ctx.send("Please input a number smaller than or equal 6")
+
+    if times > 6:
+        await ctx.send("Please input a number smaller than or equal 6")
+    else:
+        for i in range(0,times):
+            try:
+                try:
+                    r = requests.get(imglink)
+                except Exception:
+                    await ctx.send("Invalid image link")
+                imagebytes = r.content
+                with open('weirdcore.jpg','wb') as f:
+                    f.write(imagebytes)
+                img = PIL.Image.open('./weirdcore.jpg')
+
+                img = fix_large_image(img)
+
+                h, w = img.size
+                withborder = random.choice([True,False])
+
+                x1 = random.randint(0,int(w/3))
+                x2 = random.randint(int(h-h/3),h)
+                y1 = random.randint(0,int(h/3))
+                y2 = random.randint(int(w-w/3),w)
+                img = img.crop((x1,y1,x2,y2))
+
+
+                addition = random.choice(complexlist)
+                if addition == 1: #void
+                    h, w = img.size
+                    void = random.choice(voidimages)
+                    voidimage = PIL.Image.open(f'./{void}')
+                    img.paste(voidimage,(random.randint(0,int(w/3)),random.randint(0,int(h/3))),voidimage)
+                elif addition == 2: #censor box
+                    draw = ImageDraw.Draw(img)
+                    h, w = img.size
+                    x1 = random.randint(0,h)
+                    y1 = random.randint(0,w)
+                    x2 = random.randint(x1-150, x1+150)
+                    y2 = random.randint(y1-150, y1+150)
+                    draw.rectangle((x1,y1,x2,y2), fill=(0,0,0),width = 12)
+                elif addition == 3: #lens flare
+                    h, w = img.size
+                    lens = random.choice(lensimages)
+                    lensimage = PIL.Image.open(f'./{lens}').convert("RGBA")
+                    img.paste(lensimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),lensimage)
+                else: #stars
+                    h, w = img.size
+                    star = random.choice(starimages)
+                    starimage = PIL.Image.open(f'./{star}').convert("RGBA")
+                    img.paste(starimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),starimage)
+
+
+                if withborder:
+                    r = int(random.choice(['0','128','255']))
+                    g = int(random.choice(['0','128','255']))
+                    b = int(random.choice(['0','128','255']))
+
+                    draw = ImageDraw.Draw(img)
+                    draw.rectangle((0,0,h,w),width=random.randint(9,30),outline=(r, g, b))
+
+
+                img = add_text(img)
+                img = img.convert('RGB')
+                img.save("./compressed.jpg",quality=random.randint(15,30))
+                await ctx.send("Finished edit!", file = discord.File('compressed.jpg'))
+            except Exception:
+                await ctx.send("An error occured! Please try again.")
 
 @client.command()
-async def squish(ctx,axis,imglink):
+async def squish(ctx,axis):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -407,10 +445,11 @@ async def squish(ctx,axis,imglink):
 
 @client.command(aliases=['baseimage','baseimages','base','baseimg'])
 async def _base(ctx):
-    await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,12))}.jpg'))
+    await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,15))}.jpg'))
 
 @client.command(aliases=["addborder",'frame','addframe'])
-async def _border(ctx,imglink):
+async def _border(ctx):
+    imglink = get_image_link()
     try:
         r = requests.get(imglink)
     except Exception:
@@ -423,12 +462,12 @@ async def _border(ctx,imglink):
 
     h, w = img.size
 
-    r = int(random.choice(['0','128','255']))
+    red = int(random.choice(['0','128','255']))
     g = int(random.choice(['0','128','255']))
     b = int(random.choice(['0','128','255']))
 
     draw = ImageDraw.Draw(img)
-    draw.rectangle((0,0,h,w),width=random.randint(9,30),outline=(r, g, b))
+    draw.rectangle((0,0,h,w),width=random.randint(9,30),outline=(red, g, b))
 
     img = img.convert('RGB')
     img.save("./weirdcore.jpg")
@@ -438,5 +477,6 @@ async def _border(ctx,imglink):
 async def _text(ctx):
     await ctx.send(f'Random text: `{random.choice(texts)}`')
 
+client.load_extension('extension')
   
 client.run('token goes here')
