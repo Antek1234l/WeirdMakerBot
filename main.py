@@ -1,4 +1,3 @@
-from os import link
 import discord,requests,random,time
 import PIL
 from PIL import Image, ImageDraw, ImageFont
@@ -13,7 +12,7 @@ texts = ['It will all end soon','End is near','Reality will break soon',
 'All that remains','There is still good',"You won't have to",'So much hate','Who were you','The same','Analyze',
 'None to give']
 fonts = ['arial.ttf','times.ttf']
-voidimages = ['void1.png','void2.png','void3.png']
+voidimages = ['void1.png','void2.png','void3.png','void4.png','void5.png','void6.png']
 lensimages = ['lens_flare1.png','lens_flare2.png','lens_flare3.png','lens_flare4.png','lens_flare5.png','lens_flare6.png','lens_flare7.png','lens_flare8.png','lens_flare9.png']
 starimages = ['stars.png','stars2.png','stars3.png',]
 
@@ -69,12 +68,6 @@ def fix_large_image(image):
     return image
 
 
-def get_image_link():
-    time.sleep(0.6)
-    with open ('hlink.txt', 'r+') as file:
-        url = file.read()
-        file.write('                                                                                                                                        ')
-        return url
 
 @client.group(invoke_without_command=True)
 async def help(ctx):
@@ -109,7 +102,13 @@ async def ping(ctx):
 
 @client.command()
 async def compressrand(ctx):
-    imglink = get_image_link()
+
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
+
     try:
         r = requests.get(imglink)
     except Exception:
@@ -124,7 +123,13 @@ async def compressrand(ctx):
 
 @client.command()
 async def compress(ctx,quality):
-    imglink = get_image_link()
+
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
+
     try:
         quality = int(quality)
     except Exception:
@@ -146,7 +151,11 @@ async def compress(ctx,quality):
 
 @client.command()
 async def addrandomtext(ctx):
-    imglink = get_image_link()
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         r = requests.get(imglink)
     except Exception:
@@ -163,7 +172,12 @@ async def addrandomtext(ctx):
 
 @client.command()
 async def addtext(ctx,r,g,b,size,text):
-    imglink = get_image_link()
+
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         r = int(r)
         g = int(g)
@@ -210,7 +224,13 @@ async def addtext(ctx,r,g,b,size,text):
 
 @client.command()
 async def addvoid(ctx):
-    imglink = get_image_link()
+    
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
+
     try:
         r = requests.get(imglink)
     except Exception:
@@ -232,7 +252,11 @@ async def addvoid(ctx):
 
 @client.command()
 async def addlensflare(ctx):
-    imglink = get_image_link()
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         r = requests.get(imglink)
     except Exception:
@@ -254,7 +278,12 @@ async def addlensflare(ctx):
 
 @client.command()
 async def crop(ctx):
-    imglink = get_image_link()
+
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         r = requests.get(imglink)
     except Exception:
@@ -280,7 +309,11 @@ async def crop(ctx):
 
 @client.command(aliases=['addcensorbox','addcensor'])
 async def _addcensor(ctx):
-    imglink = get_image_link()
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         r = requests.get(imglink)
     except Exception:
@@ -305,7 +338,11 @@ async def _addcensor(ctx):
 
 @client.command(aliases=['simpleweirdcore','simplewc','simple'])
 async def _simplewc(ctx, times=1):
-    imglink = get_image_link()
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         times = int(times)
     except Exception:
@@ -344,7 +381,11 @@ async def _simplewc(ctx, times=1):
 
 @client.command(aliases=['complexweirdcore','complexwc','complex'])
 async def _complexwc(ctx, times=1):
-    imglink = get_image_link()
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         times = int(times)
     except Exception:
@@ -420,7 +461,10 @@ async def _complexwc(ctx, times=1):
 
 @client.command()
 async def squish(ctx,axis):
-    imglink = get_image_link()
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
     try:
         r = requests.get(imglink)
     except Exception:
@@ -449,7 +493,13 @@ async def _base(ctx):
 
 @client.command(aliases=["addborder",'frame','addframe'])
 async def _border(ctx):
-    imglink = get_image_link()
+
+
+    try:
+        imglink = ctx.message.attachments[0].url
+    except IndexError:
+        await ctx.send('Please provide the image')
+
     try:
         r = requests.get(imglink)
     except Exception:
