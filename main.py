@@ -14,9 +14,10 @@ texts = ['It will all end soon','End is near','Reality will break soon',
 fonts = ['arial.ttf','times.ttf']
 voidimages = ['void1.png','void2.png','void3.png','void4.png','void5.png','void6.png']
 lensimages = ['lens_flare1.png','lens_flare2.png','lens_flare3.png','lens_flare4.png','lens_flare5.png','lens_flare6.png','lens_flare7.png','lens_flare8.png','lens_flare9.png']
-starimages = ['stars.png','stars2.png','stars3.png',]
+starimages = ['stars.png','stars2.png','stars3.png']
+orbimages = ['orb1.png','orb2.png','orb3.png']
 
-complexlist = [1,2,3,4] #1 is void, 2 is censor box, 3 is lens flare, 4 stars
+complexlist = [1,2,3,4,5] #1 is void, 2 is censor box, 3 is lens flare, 4 stars, 5 is orb
 
 def add_text(img):
 
@@ -101,12 +102,13 @@ async def ping(ctx):
     await ctx.send(embed=pingembed)
 
 @client.command()
-async def compressrand(ctx):
+async def compressrand(ctx,imglink = None):
+    if imglink == None:
 
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
 
     try:
@@ -122,12 +124,12 @@ async def compressrand(ctx):
     await ctx.send("Compressed!", file = discord.File('compressed.jpg'))
 
 @client.command()
-async def compress(ctx,quality):
-
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def compress(ctx,quality,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
 
     try:
@@ -150,11 +152,12 @@ async def compress(ctx,quality):
         await ctx.send("Compressed!", file = discord.File('compressed.jpg'))
 
 @client.command()
-async def addrandomtext(ctx):
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def addrandomtext(ctx,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         r = requests.get(imglink)
@@ -222,13 +225,13 @@ async def addtext(ctx,r,g,b,size,text):
         else:
             await ctx.send("Invalid color value!")
 
-@client.command()
-async def addvoid(ctx):
-    
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+@client.command(aliases=['addvoid','void','voidadd'])
+async def _void(ctx,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
 
     try:
@@ -251,11 +254,12 @@ async def addvoid(ctx):
     await ctx.send("Void added!", file = discord.File('weirdcore.png'))
 
 @client.command()
-async def addlensflare(ctx):
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def addlensflare(ctx,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         r = requests.get(imglink)
@@ -277,12 +281,12 @@ async def addlensflare(ctx):
     await ctx.send("Lens flare added!", file = discord.File('weirdcore.png'))
 
 @client.command()
-async def crop(ctx):
-
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def crop(ctx,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         r = requests.get(imglink)
@@ -307,12 +311,13 @@ async def crop(ctx):
     img.save("./weirdcore.jpg")
     await ctx.send("Cropped!", file = discord.File('weirdcore.jpg'))
 
-@client.command(aliases=['addcensorbox','addcensor'])
-async def _addcensor(ctx):
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+@client.command(aliases=['addcensorbox','addcensor','censor'])
+async def _addcensor(ctx,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         r = requests.get(imglink)
@@ -337,11 +342,12 @@ async def _addcensor(ctx):
     await ctx.send("Censor box added!", file = discord.File('weirdcore.jpg'))
 
 @client.command(aliases=['simpleweirdcore','simplewc','simple'])
-async def _simplewc(ctx, times=1):
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def _simplewc(ctx,times = 1, imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         times = int(times)
@@ -380,11 +386,12 @@ async def _simplewc(ctx, times=1):
                 await ctx.send("An error occured! Please try again.")
 
 @client.command(aliases=['complexweirdcore','complexwc','complex'])
-async def _complexwc(ctx, times=1):
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def _complexwc(ctx,times = 1, imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         times = int(times)
@@ -436,6 +443,11 @@ async def _complexwc(ctx, times=1):
                     lens = random.choice(lensimages)
                     lensimage = PIL.Image.open(f'./{lens}').convert("RGBA")
                     img.paste(lensimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),lensimage)
+                elif addition == 5: #orb
+                    h, w = img.size
+                    orb = random.choice(orbimages)
+                    orbimage = PIL.Image.open(f'./{orb}').convert("RGBA")
+                    img.paste(orbimage,(random.randint(0,int(w/6)),random.randint(0,int(h/6))),orbimage)
                 else: #stars
                     h, w = img.size
                     star = random.choice(starimages)
@@ -460,11 +472,12 @@ async def _complexwc(ctx, times=1):
                 await ctx.send("An error occured! Please try again.")
 
 @client.command()
-async def squish(ctx,axis):
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+async def squish(ctx,axis,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
     try:
         r = requests.get(imglink)
     except Exception:
@@ -492,13 +505,14 @@ async def _base(ctx):
     await ctx.send("Random base image: ", file=discord.File(f'./baseimages/{str(random.randint(1,15))}.jpg'))
 
 @client.command(aliases=["addborder",'frame','addframe'])
-async def _border(ctx):
+async def _border(ctx,imglink = None):
+    if imglink == None:
 
 
-    try:
-        imglink = ctx.message.attachments[0].url
-    except IndexError:
-        await ctx.send('Please provide the image')
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
 
     try:
         r = requests.get(imglink)
@@ -526,6 +540,36 @@ async def _border(ctx):
 @client.command(aliases = ['randomtext','text'])
 async def _text(ctx):
     await ctx.send(f'Random text: `{random.choice(texts)}`')
+
+
+
+@client.command(aliases=['addorb','orb','orbadd'])
+async def _orb(ctx,imglink = None):
+    if imglink == None:
+        try:
+            imglink = ctx.message.attachments[0].url
+        except IndexError:
+            await ctx.send('Please provide the image')
+
+
+    try:
+        r = requests.get(imglink)
+    except Exception:
+        await ctx.send("Invalid image link")
+    imagebytes = r.content
+    with open('currentimage.png','wb') as f:
+        f.write(imagebytes)
+    img = PIL.Image.open('./currentimage.png')
+    img = fix_large_image(img)
+
+
+    h, w = img.size
+    orb = random.choice(orbimages)
+    orbimage = PIL.Image.open(f'./{orb}')
+    img.paste(orbimage,(random.randint(0,int(w/3)),random.randint(0,int(h/3))),orbimage)
+    img = img.convert('RGBA')
+    img.save("./weirdcore.png")
+    await ctx.send("Orb added!", file = discord.File('weirdcore.png'))
 
 client.load_extension('extension')
   
